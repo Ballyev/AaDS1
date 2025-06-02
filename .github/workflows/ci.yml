@@ -10,27 +10,26 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Install basic dependencies
+      - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y g++ python3 make
+          sudo apt-get install -y g++ make libgtest-dev
+          cd /usr/src/gtest
+          sudo cmake CMakeLists.txt
+          sudo make
+          sudo cp *.a /usr/local/lib
 
-      - name: Build and test
+      - name: Build project and tests
         run: |
           make
-          
-          if [ -f "./ascii85_decoder" ]; then
-            echo "Main binary built successfully"
+          make test
+
+      - name: Run unit tests
+        run: |
+          if [ -f "./unit_tests" ]; then
+            ./unit_tests
           else
-            echo "Error: Main binary not found!"
+            echo "Error: unit_tests executable not found!"
             ls -la
             exit 1
           fi
-          
-          python3 tests.py
-
-
-      - name: Skip unit tests
-        run: |
-          echo "Skipping unit tests to avoid GTest installation issues"
-          echo "Consider using Catch2 or doctest for simpler testing"
