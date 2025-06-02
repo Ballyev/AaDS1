@@ -13,13 +13,29 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y g++ python3
+          sudo apt-get install -y g++ python3 make cmake libgtest-dev
+          cd /usr/src/gtest
+          sudo cmake .
+          sudo make
+          sudo cp *.a /usr/local/lib
 
-      - name: Build project
-        run: make
-
-      - name: Run unit tests
-        run: ./unit_tests
+      - name: Build and test
+        run: |
+          make
+          make test
+          
+         
+          if [ ! -f "./unit_tests" ]; then
+            echo "Error: unit_tests not found after build!"
+            echo "Build output:"
+            ls -la
+            echo "Make output:"
+            make --debug
+            exit 1
+          fi
+          
+        
+          ./unit_tests
 
       - name: Run python tests
         run: python3 tests.py
