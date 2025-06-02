@@ -124,7 +124,6 @@ TEST(ASCII85DecoderTest, Performance) {
     std::string test_data(100000, 'A');
     EXPECT_NO_THROW(ASCII85Decoder::decode(test_data));
 }
-
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
