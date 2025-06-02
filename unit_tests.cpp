@@ -128,3 +128,20 @@ int main(int argc, char **argv) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
 }
+TEST(ASCII85EncoderTest, BasicEncoding) {
+    std::vector<uint8_t> data = {'M', 'a', 'n', ' '};
+    std::string encoded = ASCII85Decoder::encode(data);
+    EXPECT_EQ(encoded, "9jqo^");
+}
+
+TEST(ASCII85EncoderTest, ZeroBytes) {
+    std::vector<uint8_t> data(4, 0);
+    std::string encoded = ASCII85Decoder::encode(data);
+    EXPECT_EQ(encoded, "z");
+}
+
+TEST(ASCII85EncoderTest, PartialGroup) {
+    std::vector<uint8_t> data = {'A'};
+    std::string encoded = ASCII85Decoder::encode(data);
+    EXPECT_EQ(encoded.length(), 2);
+}

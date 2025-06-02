@@ -13,7 +13,6 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-
           sudo apt-get install -y g++ make libgtest-dev
 
       - name: Copy GoogleTest libraries to /usr/local/lib
@@ -21,6 +20,7 @@ jobs:
           sudo mkdir -p /usr/local/lib
           sudo cp /usr/lib/x86_64-linux-gnu/libgtest.a /usr/local/lib/
           sudo cp /usr/lib/x86_64-linux-gnu/libgtest_main.a /usr/local/lib/
+
 
       - name: Build project and tests
         run: |
