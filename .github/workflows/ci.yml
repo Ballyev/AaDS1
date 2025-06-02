@@ -13,28 +13,32 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y g++ python3 make cmake libgtest-dev
-          cd /usr/src/gtest
-          sudo cmake .
-          sudo make
-          sudo cp *.a /usr/local/lib
+          sudo apt-get install -y g++ python3 make cmake libgtest-dev libgtest
+          sudo apt-get install -y googletest
 
-      - name: Build and test
+      - name: Build GTest manually
+        run: |
+          mkdir -p ~/gtest-build
+          cd ~/gtest-build
+          cmake /usr/src/googletest
+          make
+          sudo cp lib/*.a /usr/local/lib
+
+      - name: Build and test project
         run: |
           make
           make test
           
-         
+          
           if [ ! -f "./unit_tests" ]; then
-            echo "Error: unit_tests not found after build!"
-            echo "Build output:"
+            echo "=== Error: unit_tests not found! ==="
+            echo "Содержимое папки:"
             ls -la
-            echo "Make output:"
-            make --debug
+            echo "Попытка найти исполняемые файлы:"
+            find . -type f -executable
             exit 1
           fi
           
-        
           ./unit_tests
 
       - name: Run python tests
