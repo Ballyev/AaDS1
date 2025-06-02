@@ -1,7 +1,6 @@
 import subprocess
 import base64
 import unittest
-
 class TestASCII85Decoder(unittest.TestCase):
     def test_basic_decoding(self):
         test_data = b"Hello"
