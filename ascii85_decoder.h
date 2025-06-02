@@ -11,7 +11,7 @@ public:
     static std::vector<uint8_t> decode(const std::string& input);
     static void decodeStream(std::istream& in, std::ostream& out);
 
-    //Coder method
+    //Encoder method
     static std::string encode(const std::vector<uint8_t>& data);
 
 private:
