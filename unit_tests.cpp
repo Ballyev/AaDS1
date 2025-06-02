@@ -47,7 +47,7 @@ TEST(ASCII85DecoderTest, WithDelimiters) {
 
 TEST(ASCII85DecoderTest, MultipleBlocks) {
     auto result = ASCII85Decoder::decode("9jqo^BlbD");
-    ASSERT_EQ(result.size(), 8);
+    ASSERT_EQ(result.size(), 7);
     EXPECT_EQ(result[0], 'M');
     EXPECT_EQ(result[1], 'a');
     EXPECT_EQ(result[2], 'n');
@@ -127,4 +127,21 @@ TEST(ASCII85DecoderTest, Performance) {
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
+}
+TEST(ASCII85EncoderTest, BasicEncoding) {
+    std::vector<uint8_t> data = {'M', 'a', 'n', ' '};
+    std::string encoded = ASCII85Decoder::encode(data);
+    EXPECT_EQ(encoded, "9jqo^");
+}
+
+TEST(ASCII85EncoderTest, ZeroBytes) {
+    std::vector<uint8_t> data(4, 0);
+    std::string encoded = ASCII85Decoder::encode(data);
+    EXPECT_EQ(encoded, "z");
+}
+
+TEST(ASCII85EncoderTest, PartialGroup) {
+    std::vector<uint8_t> data = {'A'};
+    std::string encoded = ASCII85Decoder::encode(data);
+    EXPECT_EQ(encoded.length(), 2);
 }
